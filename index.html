@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="UTF-8">
+  <title>Számla Kezelés</title>
+  <script src="app.js" defer></script>
+  <style>
+    #invoiceForm{
+      width: 75%;
+    }
+    #invoiceDetails {
+  display: none;
+  border: 1px solid #ccc;
+  padding: 15px;
+  width: 50%;
+  margin: 0 auto;
+  background: white;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+}
+
+#invoiceHeader {
+  text-align: center;
+  font-size: 22px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 15px;
+}
+
+.invoice-container {
+  display: flex;
+  justify-content: space-between;
+  gap: 15px;
+}
+
+.invoice-column {
+  width: 45%;
+  background: #f9f9f9;
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+.invoice-column h3 {
+  color: #007bff;
+  margin-bottom: 10px;
+}
+
+.invoice-column p {
+  margin: 5px 0;
+  font-size: 16px;
+}
+
+    body {
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f4;
+  color: #333;
+  text-align: center;
+  padding: 20px;
+}
+
+h1, h2 {
+  color: #444;
+}
+
+form {
+  background: white;
+  padding: 15px;
+  border-radius: 5px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  display: inline-block;
+}
+
+input, select {
+  display: block;
+  width: 100%;
+  margin: 10px 0;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+table {
+  width: 80%;
+  margin: 20px auto;
+  border-collapse: collapse;
+  background: white;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+th, td {
+  padding: 10px;
+  border: 1px solid #ddd;
+}
+
+th {
+  background-color: #007bff;
+  color: white;
+}
+
+tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+/* Sztornózott számlák kiemelése */
+.storno {
+  background-color: red !important;
+  color: white !important;
+}
+
+/* Számla részletek */
+#invoiceDetails {
+  background: white;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+  </style>
+</head>
+<body>
+  <h1>Számlák</h1>
+  <h2>Új számla hozzáadása</h2>
+<form id="invoiceForm">
+    <label for="new_issuer_name">Kiállító:</label>
+<select id="new_issuer_name" onchange="fillIssuerDetails()">
+    <option value="">Válassz kiállítót...</option>
+</select>
+
+<input type="text" id="new_issuer_address" placeholder="Kiállító címe" required readonly />
+<input type="text" id="new_issuer_tax_number" placeholder="Kiállító adószáma" required readonly />
+
+
+    <input type="text" id="new_buyer_name" placeholder="Vevő neve" required />
+    <input type="text" id="new_buyer_address" placeholder="Vevő címe" required />
+    <input type="text" id="new_buyer_tax_number" placeholder="Vevő adószáma" required />
+
+    <input type="text" id="new_invoice_number" placeholder="Számla száma" required />
+    <input type="date" id="new_invoice_date" required />
+    <input type="date" id="new_completion_date" required />
+
+    <input type="number" id="new_total_amount" placeholder="Nettó összeg" required />
+    <input type="number" id="new_vat" placeholder="ÁFA (%)" required />
+
+    <button type="submit">Számla hozzáadása</button>
+</form>
+
+  <table id="invoiceTable">
+    <thead>
+      <tr>
+        <th>Számla száma</th>
+        <th>Eladó</th>
+        <th>Vevő</th>
+        <th>Műveletek</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <div id="invoiceDetails">
+    <div id="invoiceHeader"></div>
+    <div class="invoice-container">
+      <div class="invoice-column">
+        <h3>Eladó</h3>
+        <p id="issuer_name"></p>
+        <p id="issuer_address"></p>
+        <p id="issuer_tax_number"></p>
+      </div>
+      <div class="invoice-column">
+        <h3>Vevő</h3>
+        <p id="buyer_name"></p>
+        <p id="buyer_address"></p>
+        <p id="buyer_tax_number"></p>
+      </div>
+    </div>
+    <h3>Dátumok</h3>
+    <p>Számla kelte: <span id="invoice_date"></span></p>
+    <p>Teljesítés dátuma: <span id="completion_date"></span></p>
+    <p>Fizetési határidő: <span id="payment_deadline"></span></p>
+    <h3>Összeg</h3>
+    <p>Nettó összeg: <span id="total_amount"></span></p>
+    <p>ÁFA: <span id="vat"></span>%</p>
+    <p>Bruttó összeg: <span id="gross_amount"></span></p>
+  </div>
+</body>
+</html>
